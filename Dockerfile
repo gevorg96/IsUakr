@@ -13,4 +13,4 @@ RUN dotnet publish IsUakr.sln -c Release -o out
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
 WORKDIR /app
 COPY --from=build-env /app/out .
-CMD dotnet IsUakr.Mvc.dll
+CMD dotnet IsUark.Mvc.dll
