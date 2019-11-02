@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DAL
+namespace IsUakr.DAL
 {
     public class Street
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace DAL
+namespace IsUakr.DAL
 {
     public sealed class NpgDbContext: DbContext
     {

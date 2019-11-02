@@ -1,4 +1,19 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿$(document).ready(function(){
+    $("select.street").change(function(){
+        var selectedStreet = $(this).children("option:selected").val();
+        $.ajax({
+            type: "GET",
+            url: "../api/houses/" + selectedStreet,
+            success: function(response) {
+                $('#houses').find('option').remove().end();
+                for (var i = 0; i <response.length; i++){
+                    $('#houses').append('<option value="' + response[i].id +'">'+ response[i].num +'</option>'); 
+                }
+            },  
+            error: function(thrownError) {
+                
+                console.log(thrownError);
+            }
+        });
+    });
+});

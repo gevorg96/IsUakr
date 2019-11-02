@@ -1,4 +1,4 @@
-namespace DAL
+namespace IsUakr.DAL
 {
     public class House
     {
