@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{B9C3504A-F5F4-4D26-A707-9E76F165EE09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUakr.DAL", "IsUakr.DAL\IsUakr.DAL.csproj", "{B9C3504A-F5F4-4D26-A707-9E76F165EE09}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUark.Mvc", "IsUark.Mvc\IsUark.Mvc.csproj", "{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}"
 EndProject
