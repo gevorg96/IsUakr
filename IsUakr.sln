@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUakr", "IsUakr\IsUakr.csproj", "{0B73C267-6704-4388-97B2-D4DEC06293D1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{B9C3504A-F5F4-4D26-A707-9E76F165EE09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUark.Mvc", "IsUark.Mvc\IsUark.Mvc.csproj", "{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,13 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0B73C267-6704-4388-97B2-D4DEC06293D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B73C267-6704-4388-97B2-D4DEC06293D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B73C267-6704-4388-97B2-D4DEC06293D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B73C267-6704-4388-97B2-D4DEC06293D1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9C3504A-F5F4-4D26-A707-9E76F165EE09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9C3504A-F5F4-4D26-A707-9E76F165EE09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9C3504A-F5F4-4D26-A707-9E76F165EE09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9C3504A-F5F4-4D26-A707-9E76F165EE09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
