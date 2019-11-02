@@ -25,10 +25,10 @@ namespace IsUark.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             var builder = new PostgreSqlConnectionStringBuilder(
-                "d1adtvm6bavqp6",
-                "ec2-174-129-253-62.compute-1.amazonaws.com",
-                "8600d78661ce0ad3417bf056d64a807a5fbf6abc37091f05a99b53bb3dc25a13",
-                "uqyvgpqzzrgslm",
+                "dfqjg178fisif3",
+                "ec2-176-34-184-174.eu-west-1.compute.amazonaws.com",
+                "d21ed0472a9f90c3ed1a987d81fab642d98fb0efe9de3afd6a855f9948030a1b",
+                "bmtvsxirwexwqf",
                 5432, 
                 true, 
                 true, 
