@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUark.Mvc", "IsUark.Mvc\IsUark.Mvc.csproj", "{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUakr.Parcer", "IsUakr.Parcer\IsUakr.Parcer.csproj", "{4FE66E50-8038-46C9-9F91-2760C3171478}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FE66E50-8038-46C9-9F91-2760C3171478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FE66E50-8038-46C9-9F91-2760C3171478}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FE66E50-8038-46C9-9F91-2760C3171478}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FE66E50-8038-46C9-9F91-2760C3171478}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

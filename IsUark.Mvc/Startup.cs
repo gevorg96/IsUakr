@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL;
 using IsUakr;
+using IsUakr.Parcer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,6 +34,11 @@ namespace IsUark.Mvc
                 true, 
                 true, 
                 SslMode.Require);
+            services.AddTransient(o => new NpgDbContext(builder.ConnectionString));
+            
+            var parcer = new Parcer(builder.ConnectionString);
+            parcer.Run();
+            
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

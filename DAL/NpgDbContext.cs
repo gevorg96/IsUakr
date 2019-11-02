@@ -6,11 +6,12 @@ namespace DAL
     {
         private string connectionString;
         public DbSet<House> Houses { get; set; }
+        public DbSet<Street> Streets { get; set; }
          
         public NpgDbContext(string conn)
         {
             connectionString = conn;
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
          
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
