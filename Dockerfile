@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY IsUakr/*.csproj ./
+COPY IsUakr.Mvc/*.csproj ./
 RUN dotnet restore
 
 # Copy everything else and build
@@ -13,4 +13,4 @@ RUN dotnet publish IsUakr.sln -c Release -o out
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
 WORKDIR /app
 COPY --from=build-env /app/out .
-CMD dotnet IsUakr.dll
+CMD dotnet IsUakr.Mvc.dll
