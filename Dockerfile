@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY IsUakr.Mvc/*.csproj ./
+COPY *.Mvc/*.csproj ./
 RUN dotnet restore
 
 # Copy everything else and build
