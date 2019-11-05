@@ -16,6 +16,7 @@ namespace IsUark.Mvc.Controllers
         public AjaxController(NpgDbContext db)
         {
             _db = db;
+            
         }
         
         [HttpGet("{id}")]
