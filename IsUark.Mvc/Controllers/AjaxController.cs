@@ -19,9 +19,9 @@ namespace IsUark.Mvc.Controllers
         }
         
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<House>>> GetHousesByStreetId(int? id)
+        public ActionResult<List<House>> GetHousesByStreetId(int? id)
         {
-            return _db.Houses.Where(p => p.Street.id == id).ToList();
+            return null; //_db.Houses.Where(p => p.Street.id == id).ToList();
         }
     }
 }

@@ -23,7 +23,8 @@ namespace IsUark.Mvc.Controllers
 
         public IActionResult Index()
         {
-            return View(_db.Streets.Include(p => p.Houses).ToList());
+            return View();
+            //return View(_db.Streets.Include(p => p.Houses).ToList());
         }
         
         public IActionResult Privacy()

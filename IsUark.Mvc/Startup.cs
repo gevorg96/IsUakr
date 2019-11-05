@@ -32,8 +32,8 @@ namespace IsUark.Mvc
                 SslMode.Require);
             services.AddTransient(o => new NpgDbContext(builder.ConnectionString));
             
-            var parcer = new Parcer(builder.ConnectionString);
-            parcer.Run();
+            //var parcer = new Parcer(builder.ConnectionString);
+            //parcer.Run();
             
             services.AddControllersWithViews();
             services.AddRazorPages();

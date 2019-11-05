@@ -1,10 +1,24 @@
+using System;
+using System.Collections.Generic;
+
 namespace IsUakr.DAL
 {
     public class House
     {
         public int id { get; set; }
-        public string num { get; set; }
-        public virtual Street Street{ get; set; }
-        public int typeId { get; set; }
+        public string address { get; set; }
+        public double? square{ get; set; }
+        public int? year { get; set; }
+        public int? floors { get; set; }
+        public int num { get; set; }
+        public int? flatsCount { get; set; }
+        public DateTime? manageStartDate { get; set; }
+        public List<Flat> Flats { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", id, address, square, year, floors, num,
+                flatsCount, manageStartDate);
+        }
     }
 }
