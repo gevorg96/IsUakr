@@ -1,37 +1,101 @@
-﻿@model System.Collections.Generic.List<Street>
+﻿@model AggregateViewModel
 
 <div class="text-center">
     <form>
-        <div class="row">
-            <div class="col-1">
-                <label style="padding-top: 5px"><b>Улица</b></label>
-            </div>
-            <div class="col-3">
-                <select class="form-control street">
-                    @foreach (Street street in Model)
-                    {
-                        <option value="@street.id">@street.name </option>
-                    }
-                </select>
-            </div>
+    <div class="row">
+        <div class="col-1">
+            <label style="padding-top: 5px"><b>Улица</b></label>
         </div>
-        <br/>
-        <div class="row">
-            <div class="col-1">
-                <label style="padding-top: 5px"><b>Строение</b></label>
-            </div>
-            <div class="col-3">
+        <div class="col-3">
+            <select class="form-control street">
+                @foreach (Street street in Model.Streets)
+                {
+                    <option value="@street.id">@street.name </option>
+                }
+            </select>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-1">
+            <label style="padding-top: 5px"><b>Строение</b></label>
+        </div>
+        <div class="col-3">
 
-                <select id="houses" class="form-control">
-                    @{
-                        System.Collections.Generic.List<House> houses = Model.FirstOrDefault().Houses;
-                    }
-                    @foreach (House house in houses)
-                    {
-                        <option value="@house.id">@house.number</option>
-                    }
-                </select>
-            </div>
+            <select id="houses" class="form-control house">
+                @{
+                    System.Collections.Generic.List<House> houses = Model.Streets.FirstOrDefault().Houses;
+                }
+                @foreach (House house in houses)
+                {
+                    <option value="@house.id">@house.number</option>
+                }
+            </select>
         </div>
+    </div>
+    <br/>
+    <div class="row" >
+        <div class="col-2">
+            <label><b>Базовая станция</b></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6" id="@Model.Hub.id">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">
+                        Идентификатор
+                    </th>
+                    <th scope="col">
+                        Код
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="meterHub">
+                    <th scope="row">@Model.Hub.id</th>
+                    <td>@Model.Hub.code</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br/>
+    <div class="row" >
+        <div class="col-1">
+            <label><b>Счётчики</b></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-7">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Идентификатор</th>
+                    <th scope="col">
+                        Код
+                    </th>
+                    <th scope="col">
+                        Тип
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="meterTable">
+                @{
+                    foreach (Meter meter in Model.Meters)
+                    {
+                        <tr>
+                            <th scope="row">@meter.id</th>
+                            <td>@meter.code</td>
+                            <td>@meter.type</td>
+                        </tr>
+                    }
+                }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
     </form>
 </div>

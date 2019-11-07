@@ -23,8 +23,17 @@ namespace IsUark.Mvc.Controllers
 
         public IActionResult Index()
         {
-            //return View();
-            return View(_db.Streets.Include(p => p.Houses).ToList());
+            var streets = _db.Streets.Include(p => p.Houses).ToList();
+            var hub = _db.MeterHubs.Include(p => p.Meters).FirstOrDefault(p =>
+                p.House.id == streets.FirstOrDefault().Houses.FirstOrDefault().id);
+            
+            var vm = new AggregateViewModel
+            {
+                Streets = streets,
+                Hub = hub,
+                Meters = hub?.Meters
+            };
+            return View(vm);
         }
         
         public IActionResult Privacy()

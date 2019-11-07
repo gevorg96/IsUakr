@@ -13,6 +13,7 @@ namespace IsUakr.DAL
         public int code { get; set; }
         public int? flatsCount { get; set; }
         public DateTime? manageStartDate { get; set; }
+        public List<MeterHub> MeterHubs { get; set; }
         public List<Flat> Flats { get; set; }
         public Street Street { get; set; }
 

@@ -14,7 +14,7 @@ namespace IsUakr.DAL
         public NpgDbContext(string conn)
         {
             connectionString = conn;
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
          
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
