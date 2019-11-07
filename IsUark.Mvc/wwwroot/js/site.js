@@ -42,7 +42,8 @@ function refreshMeters() {
 
             var meters = response.meters;
             for (var i = 0; i < meters.length; i++){
-                $('#meterTable').append('<tr><th scope="row">' + meters[i].id + '</th><td>' + meters[i].code + '</td><td>'+meters[i].type+'</td></tr>');
+                var type = meters[i].type == "heat_water" ? "ГВС" : meters[i].type == "cold_water" ? "ХВС" : "Электр.";
+                $('#meterTable').append('<tr><th scope="row">' + meters[i].id + '</th><td>' + meters[i].code + '</td><td>'+type+'</td></tr>');
             }
         },
         error: function(thrownError) {

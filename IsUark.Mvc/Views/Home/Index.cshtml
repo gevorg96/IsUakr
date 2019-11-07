@@ -3,10 +3,10 @@
 <div class="text-center">
     <form>
     <div class="row">
-        <div class="col-1">
+        <div class="col-2">
             <label style="padding-top: 5px"><b>Улица</b></label>
         </div>
-        <div class="col-3">
+        <div class="col-5">
             <select class="form-control street">
                 @foreach (Street street in Model.Streets)
                 {
@@ -17,7 +17,7 @@
     </div>
     <br/>
     <div class="row">
-        <div class="col-1">
+        <div class="col-2">
             <label style="padding-top: 5px"><b>Строение</b></label>
         </div>
         <div class="col-3">
@@ -63,7 +63,7 @@
     </div>
     <br/>
     <div class="row" >
-        <div class="col-1">
+        <div class="col-2">
             <label><b>Счётчики</b></label>
         </div>
     </div>
@@ -82,13 +82,14 @@
                 </tr>
                 </thead>
                 <tbody id="meterTable">
-                @{
+                @{                   
                     foreach (Meter meter in Model.Meters)
                     {
+                        var type = meter.type == "heat_water" ? "ГВС" : meter.type == "cold_water" ? "ХВС" : "Электр.";
                         <tr>
                             <th scope="row">@meter.id</th>
                             <td>@meter.code</td>
-                            <td>@meter.type</td>
+                            <td>@type</td>
                         </tr>
                     }
                 }
