@@ -7,6 +7,7 @@ namespace IsUark.Mvc.Models
     {
         public List<Street> Streets { get; set; }
         public MeterHub Hub { get; set; }
-        public List<Meter> Meters { get; set; }
+        public List<Meter> Meters{ get; set; }
+        public List<Flat> Flats{ get; set; }
     }
 }

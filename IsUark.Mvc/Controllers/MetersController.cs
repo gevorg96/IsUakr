@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using System.Linq;
 using IsUakr.DAL;
+using IsUark.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 
 namespace IsUark.Mvc.Controllers
 {
@@ -18,31 +17,29 @@ namespace IsUark.Mvc.Controllers
         }
         
         [HttpGet("{id}")]
-        public ActionResult<MeterHub> GetMetersHubWithMeters(int? id)
+        public ActionResult<MeterHubJson> GetMetersHubWithMeters(int? id)
         {
-            var meterHub = _db.MeterHubs.Include(p => p.Meters).FirstOrDefault(p => p.House.id == id);
-            var json = new JObject();
-            json.Add(new JProperty("id", meterHub.id));
-            json.Add(new JProperty("code", meterHub.code));
-            json.Add("meters", GetArray(meterHub.Meters.ToList()));
-            
-            return json.ToObject<MeterHub>();
-        }
+            var hub = _db.MeterHubs.Include(p => p.Meters).FirstOrDefault(p => p.House.id == id);
+            var meters = _db.Meters.Include(p => p.Flat).Where(p => p.Hub.id == hub.id).ToList();
+            var flats = meters.Select(p => p.Flat).Distinct().OrderBy(p => p.num).ToList();
 
-        private JArray GetArray(List<Meter> Meters)
-        {
-            var jarray = new JArray();
-            foreach (var meter in Meters)
+            var meterHubJson = new MeterHubJson
             {
-                var jobj = new JObject();
-                jobj.Add(new JProperty("id", meter.id));
-                jobj.Add(new JProperty("code", meter.code));
-                jobj.Add(new JProperty("type", meter.type));
-                
-                jarray.Add(jobj);
-            }
+                id = hub.id,
+                code = hub.code,
+                flats = flats.Select(p =>
+                        new FlatJson
+                        {
+                            id = p.id,
+                            num = p.num,
+                            meters = p.Meters
+                                .Select(q => new MeterJson {id = q.id, code = q.code, type = q.type})
+                                .ToList()
+                        })
+                    .ToList()
+            };
 
-            return jarray;
+            return meterHubJson;
         }
     }
 }

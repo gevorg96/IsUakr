@@ -68,29 +68,35 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-7">
+        <div class="col-8">
             <table class="table table-striped table-bordered table-hover">
                 <thead>
                 <tr>
                     <th scope="col">Идентификатор</th>
-                    <th scope="col">
-                        Код
-                    </th>
-                    <th scope="col">
-                        Тип
-                    </th>
+                    <th scope="col">Квартира</th>
+                    <th scope="col">Код</th>
+                    <th scope="col">Тип</th>
                 </tr>
                 </thead>
                 <tbody id="meterTable">
                 @{                   
-                    foreach (Meter meter in Model.Meters)
+                    foreach (Flat flat in Model.Flats)
                     {
-                        var type = meter.type == "heat_water" ? "ГВС" : meter.type == "cold_water" ? "ХВС" : "Электр.";
-                        <tr>
-                            <th scope="row">@meter.id</th>
-                            <td>@meter.code</td>
-                            <td>@type</td>
-                        </tr>
+                        for (var i = 0; i < flat.Meters.Count; i++)
+                        {
+                            var meter = flat.Meters[i];
+                            var type = meter.type == "heat_water" ? "ГВС" : meter.type == "cold_water" ? "ХВС" : "Электр.";
+                            <tr>
+                                <th scope="row">@meter.id</th>
+                                @if (i == 0)
+                                {
+                                    <td class="align-middle" rowspan="@flat.Meters.Count">кв. @flat.num</td>
+                                }
+                                <td>@meter.code</td>
+                                <td>@type</td>
+                            </tr>
+                        }
+                       
                     }
                 }
 

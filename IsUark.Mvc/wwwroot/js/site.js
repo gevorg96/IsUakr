@@ -40,10 +40,15 @@ function refreshMeters() {
             $('#meterTable').find('th').remove().end();
             $('#meterTable').find('td').remove().end();
 
-            var meters = response.meters;
-            for (var i = 0; i < meters.length; i++){
-                var type = meters[i].type == "heat_water" ? "ГВС" : meters[i].type == "cold_water" ? "ХВС" : "Электр.";
-                $('#meterTable').append('<tr><th scope="row">' + meters[i].id + '</th><td>' + meters[i].code + '</td><td>'+type+'</td></tr>');
+            var flats = response.flats;
+            for (var i = 0; i < flats.length; i++){
+                var meters = flats[i].meters;
+                for (var j = 0; j < meters.length; j++) 
+                {
+                    var type = meters[j].type == "heat_water" ? "ГВС" : meters[j].type == "cold_water" ? "ХВС" : "Электр.";
+                    $('#meterTable').append('<tr><th scope="row">' + meters[j].id + '</th>' + (j == 0 ? '<td class="align-middle" rowspan="' + meters.length+ '">кв. '+ flats[i].num +'</td>': "" )+'<td>' + meters[j].code + '</td><td>'+type+'</td></tr>');
+                }
+                
             }
         },
         error: function(thrownError) {

@@ -24,14 +24,14 @@ namespace IsUark.Mvc.Controllers
         public IActionResult Index()
         {
             var streets = _db.Streets.Include(p => p.Houses).ToList();
-            var hub = _db.MeterHubs.Include(p => p.Meters).FirstOrDefault(p =>
-                p.House.id == streets.FirstOrDefault().Houses.FirstOrDefault().id);
-            
+            var hub = _db.MeterHubs.FirstOrDefault(p => p.House.id == streets.FirstOrDefault().Houses.FirstOrDefault().id);
+            var meters = _db.Meters.Include(p => p.Flat).Where(p => p.Hub.id == hub.id).ToList();
+            var flats = meters.Select(p => p.Flat).Distinct().OrderBy(p => p.num).ToList();
             var vm = new AggregateViewModel
             {
                 Streets = streets,
                 Hub = hub,
-                Meters = hub?.Meters
+                Flats = flats
             };
             return View(vm);
         }
