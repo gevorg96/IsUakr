@@ -21,7 +21,7 @@ namespace IsUark.Mvc.Controllers
         [HttpGet("{id}")]
         public ActionResult<List<House>> GetHousesByStreetId(int? id)
         {
-            return null;
+            return _db.Houses.Where(p => p.Street.id == id).ToList();
         }
     }
 }

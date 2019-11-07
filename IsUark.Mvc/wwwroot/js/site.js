@@ -7,7 +7,7 @@
             success: function(response) {
                 $('#houses').find('option').remove().end();
                 for (var i = 0; i <response.length; i++){
-                    $('#houses').append('<option value="' + response[i].id +'">'+ response[i].num +'</option>'); 
+                    $('#houses').append('<option value="' + response[i].id +'">'+ response[i].number +'</option>'); 
                 }
             },  
             error: function(thrownError) {

@@ -3,7 +3,7 @@ using IsUakr.DAL;
 
 namespace IsUark.Mvc.Models
 {
-    public class HouseStreetsViewModel
+    public class Houses
     {
         public List<Street> Streets;
     }

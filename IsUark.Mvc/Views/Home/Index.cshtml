@@ -1,7 +1,37 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model System.Collections.Generic.List<Street>
 
 <div class="text-center">
-    <h3>В разработке...</h3>
+    <form>
+        <div class="row">
+            <div class="col-1">
+                <label style="padding-top: 5px"><b>Улица</b></label>
+            </div>
+            <div class="col-3">
+                <select class="form-control street">
+                    @foreach (Street street in Model)
+                    {
+                        <option value="@street.id">@street.name </option>
+                    }
+                </select>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-1">
+                <label style="padding-top: 5px"><b>Строение</b></label>
+            </div>
+            <div class="col-3">
+
+                <select id="houses" class="form-control">
+                    @{
+                        System.Collections.Generic.List<House> houses = Model.FirstOrDefault().Houses;
+                    }
+                    @foreach (House house in houses)
+                    {
+                        <option value="@house.id">@house.number</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </form>
 </div>

@@ -72,28 +72,65 @@ namespace IsUakr.Parcer
             {
 
 
-                /*using (var sr = new StreamReader(@"d:\data\houses.csv"))
+                using (var sr = new StreamReader(@"d:\data\houses.csv"))
                 {
                     var str = sr.ReadLine();
                     while (!string.IsNullOrEmpty(str))
                     {
                         var parts = str.Split('\t');
-                        var house = new House
+
+                        var (streetStr, houseStr) = GetStreetAndHouse(parts[1]);
+
+                        var streetDal = db.Streets.FirstOrDefault(p => p.name == streetStr);
+
+                        if (streetDal != null)
                         {
-                            id = Convert.ToInt32(parts[0]),
-                            address = parts[1],
-                            square = Convert.ToDouble(parts[2]),
-                            year = Convert.ToInt32(parts[3]),
-                            num = Convert.ToInt32(parts[4]),
-                            floors = Convert.ToInt32(parts[5]),
-                            flatsCount = Convert.ToInt32(parts[6]),
-                            manageStartDate = Convert.ToDateTime(parts[7])
-                        };
-                        db.Houses.Add(house);
+                            var house = new House
+                            {
+                                number = houseStr,
+                                square = Convert.ToDouble(parts[2]),
+                                year = Convert.ToInt32(parts[3]),
+                                code = Convert.ToInt32(parts[4]),
+                                floors = Convert.ToInt32(parts[5]),
+                                flatsCount = Convert.ToInt32(parts[6]),
+                                manageStartDate = Convert.ToDateTime(parts[7]),
+                                Street = streetDal
+                            
+                            };
+                            db.Houses.Add(house);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            var street = new Street
+                            {
+                                name = streetStr
+                            };
+                            db.Streets.Add(street);
+                            db.SaveChanges();
+
+
+
+                            var house = new House
+                            {
+                                number = houseStr,
+                                square = Convert.ToDouble(parts[2]),
+                                year = Convert.ToInt32(parts[3]),
+                                code = Convert.ToInt32(parts[4]),
+                                floors = Convert.ToInt32(parts[5]),
+                                flatsCount = Convert.ToInt32(parts[6]),
+                                manageStartDate = Convert.ToDateTime(parts[7]),
+                                Street = db.Streets.FirstOrDefault(p => p.name == streetStr)
+
+                            };
+                            db.Houses.Add(house);
+                            db.SaveChanges();
+                        }
                         str = sr.ReadLine();
+
                     }
                 }
-                db.SaveChanges();*/
+
 
                 
                 foreach (var house in db.Houses.ToList())
@@ -216,6 +253,26 @@ namespace IsUakr.Parcer
             }
 
             return result;
+        }
+
+
+        private (string, string) GetStreetAndHouse(string address)
+        {
+            var parts = address.Split(new string[] {", д."}, StringSplitOptions.RemoveEmptyEntries);
+            string streetStr;
+            if (parts.Length == 1)
+            {
+                address = "д. " + parts[0].Replace(", Домодедово", "");
+                streetStr = "Домодедово";
+            }
+            else
+            {
+                address = "д. " + parts[1].Replace(", Домодедово", "");
+                streetStr = parts[0].Replace("г. Домодедово, ", "");
+            }
+
+            return (streetStr, address);
+
         }
     }
 }

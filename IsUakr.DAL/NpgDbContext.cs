@@ -9,10 +9,12 @@ namespace IsUakr.DAL
         public DbSet<Flat> Flats { get; set; }
         public DbSet<MeterHub> MeterHubs { get; set; }
         public DbSet<Meter> Meters { get; set; }
+        public DbSet<Street> Streets { get; set; }
+        
         public NpgDbContext(string conn)
         {
             connectionString = conn;
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
          
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
