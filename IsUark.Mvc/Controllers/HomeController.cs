@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IsUark.Mvc.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -35,7 +35,7 @@ namespace IsUark.Mvc.Controllers
             };
             return View(vm);
         }
-        
+
         public IActionResult Privacy()
         {
             return View();
@@ -44,7 +44,7 @@ namespace IsUark.Mvc.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

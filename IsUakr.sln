@@ -1,10 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUakr.DAL", "IsUakr.DAL\IsUakr.DAL.csproj", "{B9C3504A-F5F4-4D26-A707-9E76F165EE09}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29324.140
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IsUakr.DAL", "IsUakr.DAL\IsUakr.DAL.csproj", "{B9C3504A-F5F4-4D26-A707-9E76F165EE09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUark.Mvc", "IsUark.Mvc\IsUark.Mvc.csproj", "{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IsUark.Mvc", "IsUark.Mvc\IsUark.Mvc.csproj", "{4C90B2B0-7F49-40D1-9FE0-3C80C665DB64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUakr.Parcer", "IsUakr.Parcer\IsUakr.Parcer.csproj", "{4FE66E50-8038-46C9-9F91-2760C3171478}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IsUakr.Parcer", "IsUakr.Parcer\IsUakr.Parcer.csproj", "{4FE66E50-8038-46C9-9F91-2760C3171478}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUakr.MessageBroker", "IsUakr.MessageBroker\IsUakr.MessageBroker.csproj", "{AF1C60FB-6400-4BFD-BB81-A2C21512A491}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsUakr.MessageBroker.Tests", "IsUakr.MessageBroker.Tests\IsUakr.MessageBroker.Tests.csproj", "{091AAC00-A695-4ADA-A9DA-43171FABF3A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +31,19 @@ Global
 		{4FE66E50-8038-46C9-9F91-2760C3171478}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FE66E50-8038-46C9-9F91-2760C3171478}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FE66E50-8038-46C9-9F91-2760C3171478}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF1C60FB-6400-4BFD-BB81-A2C21512A491}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF1C60FB-6400-4BFD-BB81-A2C21512A491}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF1C60FB-6400-4BFD-BB81-A2C21512A491}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF1C60FB-6400-4BFD-BB81-A2C21512A491}.Release|Any CPU.Build.0 = Release|Any CPU
+		{091AAC00-A695-4ADA-A9DA-43171FABF3A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{091AAC00-A695-4ADA-A9DA-43171FABF3A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{091AAC00-A695-4ADA-A9DA-43171FABF3A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{091AAC00-A695-4ADA-A9DA-43171FABF3A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D7CDE134-64A6-44A1-BE01-1AD8CFA492E2}
 	EndGlobalSection
 EndGlobal

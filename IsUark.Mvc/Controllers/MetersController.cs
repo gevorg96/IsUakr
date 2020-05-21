@@ -1,5 +1,6 @@
 using System.Linq;
 using IsUakr.DAL;
+using IsUakr.MessageBroker;
 using IsUark.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,13 @@ namespace IsUark.Mvc.Controllers
     public class MetersController
     {
         private readonly NpgDbContext _db;
+        private MqManager _mqManager;
 
-        public MetersController(NpgDbContext db)
+
+        public MetersController(NpgDbContext db, MqManager mqManager)
         {
             _db = db;
+            _mqManager = mqManager;
         }
         
         [HttpGet("{id}")]
@@ -40,6 +44,13 @@ namespace IsUark.Mvc.Controllers
             };
 
             return meterHubJson;
+        }
+
+        [HttpPost]
+        public IActionResult Load([FromBody] HubMessage message)
+        {
+
+            return null;
         }
     }
 }
