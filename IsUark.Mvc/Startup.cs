@@ -1,12 +1,12 @@
-using IsUakr;
 using IsUakr.DAL;
 using IsUakr.MessageBroker;
+using IsUakr.MessageBroker.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using System.Collections.Generic;
 
 namespace IsUark.Mvc
 {
@@ -22,18 +22,14 @@ namespace IsUark.Mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var builder = new PostgreSqlConnectionStringBuilder(
-                "dfqjg178fisif3",
-                "ec2-176-34-184-174.eu-west-1.compute.amazonaws.com",
-                "d21ed0472a9f90c3ed1a987d81fab642d98fb0efe9de3afd6a855f9948030a1b",
-                "bmtvsxirwexwqf",
-                5432, 
-                true, 
-                true, 
-                SslMode.Require);
-            services.AddTransient(o => new NpgDbContext(builder.ConnectionString));
+            var dbConnString = Configuration.GetConnectionString("isuark_db");
+            var mqConnString = Configuration.GetConnectionString("rabbit_mq");
+            var exchangeName = Configuration.GetSection("RabbitConfiguration").GetValue<string>("exchangeName");
+            var queueNames = Configuration.GetSection("RabbitConfiguration").GetSection("queues").Get<IList<string>>();
+            services.AddSingleton(x => new QueueInfo(exchangeName, queueNames));
+            services.AddTransient(o => new NpgDbContext(dbConnString));
+            services.AddMqServices(mqConnString);
 
-            services.AddMqServices(@"amqp://ilaoklcx:OfEMmmsEpt6hYDhL_jj3F19cv5H4idWL@squid.rmq.cloudamqp.com/ilaoklcx");
 
             //var parcer = new Parcer(builder.ConnectionString);
             //parcer.Run();

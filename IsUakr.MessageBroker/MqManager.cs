@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IsUakr.MessageBroker.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,10 +10,15 @@ namespace IsUakr.MessageBroker
         private IMqService mqService;
         private List<MqQueueInfo> exchangesQueues;
 
-        public MqManager(IMqService service)
+        public MqManager(IMqService service, QueueInfo queueInfo)
         {
             mqService = service;
             exchangesQueues = new List<MqQueueInfo>();
+
+            foreach (var queueName in queueInfo.Queues)
+            {
+                exchangesQueues.Add(new MqQueueInfo { ExchangeName = queueInfo.ExchangeName, QueueName = queueName, RoutingKey = queueName });
+            }
         }
 
         private MqQueueInfo CreateNewQueue()

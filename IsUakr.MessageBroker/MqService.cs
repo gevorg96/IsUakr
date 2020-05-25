@@ -57,8 +57,8 @@ namespace IsUakr.MessageBroker
                 {
                     using (var channel = connection.CreateModel())
                     {
-                        if(queueName != null)
-                            DeclareQueue(channel, queueName, durable, exclusive, autoDelete);
+                        //if(queueName != null)
+                        //    DeclareQueue(channel, queueName, durable, exclusive, autoDelete);
                         
                         channel.BasicPublish(exchangeName, routingKey, null, Encoding.UTF8.GetBytes(data));
                     }

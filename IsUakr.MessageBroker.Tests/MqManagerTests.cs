@@ -49,16 +49,18 @@ namespace IsUakr.MessageBroker.Tests
         [Test]
         public void MqManagerTest_HighloadQueues()
         {
-            int messageCount = 102;
-
+            uint messageCount = 102;
+            uint messagesFromQueues = 0;
             try
             {
                 Assert.DoesNotThrow(() =>
                 {
                     for(var i = 0; i < messageCount; i++)
                         mqManager.PublishMessage("helloRabbit" + (i+1));
+                    messagesFromQueues = mqManager.DeleteQueues();
                 });
-                Assert.That(mqManager.DeleteQueues(), Is.EqualTo(messageCount));
+                
+                Assert.That(messagesFromQueues, Is.EqualTo(messageCount));
             }
             finally
             {
