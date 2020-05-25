@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IsUakr.MessageBroker
 {
-    public class MqService
+    public class MqService: IMqService
     {
         private static ConnectionFactory _factory;
         private static string _uri;
@@ -25,7 +25,7 @@ namespace IsUakr.MessageBroker
             return _factory;
         }
 
-        public void CreateRabbitChannel(MqQueueInfo mqInfo, bool exchangeExist)
+        public void CreateRabbitQueue(MqQueueInfo mqInfo, bool exchangeExist)
         {
             try
             {
@@ -46,7 +46,6 @@ namespace IsUakr.MessageBroker
             {
                 throw new Exception("Возникла ошибка во время создания очереди.\n Message: " + ex.Message);
             }
-            
         }
 
         public void Send(string data, MqQueueInfo mqInfo)

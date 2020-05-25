@@ -1,13 +1,10 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IsUakr.MessageBroker.Tests
 {
     public class MqManagerTests
     {
-        private MqManager mqManager;
+        private IMqManager mqManager;
 
         [SetUp]
         public void Setup()
@@ -61,6 +58,7 @@ namespace IsUakr.MessageBroker.Tests
                     for(var i = 0; i < messageCount; i++)
                         mqManager.PublishMessage("helloRabbit" + (i+1));
                 });
+                Assert.That(mqManager.DeleteQueues(), Is.EqualTo(messageCount));
             }
             finally
             {

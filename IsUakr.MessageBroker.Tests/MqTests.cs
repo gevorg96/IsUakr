@@ -5,7 +5,7 @@ namespace IsUakr.MessageBroker.Tests
 {
     public class MqTests
     {
-        private MqService mqService;
+        private IMqService mqService;
 
         [SetUp]
         public void Setup()
@@ -24,7 +24,7 @@ namespace IsUakr.MessageBroker.Tests
             {
                 Assert.DoesNotThrow(() => 
                 {
-                    mqService.CreateRabbitChannel(mqInfo, false);
+                    mqService.CreateRabbitQueue(mqInfo, false);
                 });
             }
             finally
@@ -42,7 +42,7 @@ namespace IsUakr.MessageBroker.Tests
             {
                 Assert.DoesNotThrow(() =>
                 {
-                    mqService.CreateRabbitChannel(mqInfo, false);
+                    mqService.CreateRabbitQueue(mqInfo, false);
                     mqService.Send("helloRabbit", mqInfo);
                 });
             }
@@ -63,7 +63,7 @@ namespace IsUakr.MessageBroker.Tests
                 string receivedMessage = null;
                 Assert.DoesNotThrow(() =>
                 {
-                    mqService.CreateRabbitChannel(mqInfo, false);
+                    mqService.CreateRabbitQueue(mqInfo, false);
                     mqService.Send(message, mqInfo);
                     receivedMessage = mqService.Receive(mqInfo.QueueName);
                 });
@@ -90,7 +90,7 @@ namespace IsUakr.MessageBroker.Tests
                 string secondReceivedMessage = null;
                 Assert.DoesNotThrow(() =>
                 {
-                    mqService.CreateRabbitChannel(mqInfo, false);
+                    mqService.CreateRabbitQueue(mqInfo, false);
                     mqService.Send(firstMessage, mqInfo);
                     mqService.Send(secondMessage, mqInfo);
 
@@ -121,7 +121,7 @@ namespace IsUakr.MessageBroker.Tests
                 uint messageCount = 0;
                 Assert.DoesNotThrow(() =>
                 {
-                    mqService.CreateRabbitChannel(mqInfo, false);
+                    mqService.CreateRabbitQueue(mqInfo, false);
                     mqService.Send(firstMessage, mqInfo);
                     mqService.Send(secondMessage, mqInfo);
 

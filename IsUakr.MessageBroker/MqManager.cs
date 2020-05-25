@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace IsUakr.MessageBroker
 {
-    public class MqManager
+    public class MqManager: IMqManager
     {
-        private MqService mqService;
+        private IMqService mqService;
         private List<MqQueueInfo> exchangesQueues;
 
-        public MqManager(MqService service)
+        public MqManager(IMqService service)
         {
             mqService = service;
             exchangesQueues = new List<MqQueueInfo>();
@@ -18,12 +18,17 @@ namespace IsUakr.MessageBroker
         private MqQueueInfo CreateNewQueue()
         {
             var queue = exchangesQueues.FirstOrDefault();
-            var mqInfo = new MqQueueInfo { ExchangeName = Guid.NewGuid().ToString(), RoutingKey = Guid.NewGuid().ToString(), QueueName = Guid.NewGuid().ToString() };
+            var mqInfo = new MqQueueInfo 
+            { 
+                ExchangeName = Guid.NewGuid().ToString(), 
+                RoutingKey = Guid.NewGuid().ToString(), 
+                QueueName = Guid.NewGuid().ToString() 
+            };
 
             if (queue != null)
                 mqInfo.ExchangeName = queue.ExchangeName;
 
-            mqService.CreateRabbitChannel(mqInfo, exchangesQueues.Count() != 0);
+            mqService.CreateRabbitQueue(mqInfo, exchangesQueues.Count() != 0);
             exchangesQueues.Add(mqInfo);
             return mqInfo;
         }
@@ -76,18 +81,16 @@ namespace IsUakr.MessageBroker
             }
         }
 
-        public void DeleteQueues()
+        public uint DeleteQueues()
         {
-            mqService.UsingConnection(channel =>
+            uint messageCount = 0;
+            foreach (var queue in exchangesQueues)
             {
-                foreach (var queue in exchangesQueues)
-                {
-                    mqService.DeleteQueue(queue.QueueName);
-                }
-                
-            });
+                messageCount += mqService.DeleteQueue(queue.QueueName);
+            }
 
             exchangesQueues = new List<MqQueueInfo>();
+            return messageCount;
         }
     }
 }

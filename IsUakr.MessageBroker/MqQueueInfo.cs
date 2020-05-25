@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace IsUakr.MessageBroker
+﻿namespace IsUakr.MessageBroker
 {
     public class MqQueueInfo
     {

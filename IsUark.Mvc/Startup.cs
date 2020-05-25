@@ -1,11 +1,12 @@
 using IsUakr;
 using IsUakr.DAL;
-using IsUakr.Parcer;
+using IsUakr.MessageBroker;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 
 namespace IsUark.Mvc
 {
@@ -31,7 +32,9 @@ namespace IsUark.Mvc
                 true, 
                 SslMode.Require);
             services.AddTransient(o => new NpgDbContext(builder.ConnectionString));
-            
+
+            services.AddMqServices(@"amqp://ilaoklcx:OfEMmmsEpt6hYDhL_jj3F19cv5H4idWL@squid.rmq.cloudamqp.com/ilaoklcx");
+
             //var parcer = new Parcer(builder.ConnectionString);
             //parcer.Run();
             
