@@ -1,0 +1,197 @@
+﻿@page "/"
+@inject NpgDbContext db
+@inject Generator gen
+
+<Layout>
+    <Container Fluid="true">
+        <Row>
+            <Column ColumnSize="ColumnSize.Is2">
+                <h5>Улица: </h5>
+                <SelectList Data="@Streets"
+                            TextField="@((item)=>item.name)"
+                            ValueField="@((item)=>item.id)"
+                            SelectedValue="@selectedStreet"
+                            SelectedValueChanged="@StreetsChangeHandler" />
+            </Column>
+            <Column ColumnSize="ColumnSize.Is2" />
+            <Column ColumnSize="ColumnSize.Is2">
+                <h5>Дом: </h5>
+                <SelectList Data="@Houses"
+                            TextField="@((item)=> "№. " + item.number)"
+                            ValueField="@((item)=>item.id)"
+                            SelectedValue="@selectedHouse"
+                            SelectedValueChanged="@HousesChangeHandler" />
+            </Column>
+            <Column ColumnSize="ColumnSize.Is2" />
+            <Column ColumnSize="ColumnSize.Is2">
+                <h5>Квартира: </h5>
+                <SelectList Data="@Flats"
+                            TextField="@((item)=> "кв. " + item.Num)"
+                            ValueField="@((item)=>item.Id)"
+                            SelectedValue="@selectedFlat"
+                            SelectedValueChanged="@FlatsChangeHandler" />
+            </Column>
+        </Row>
+        <br />
+        <Row>
+            <Column ColumnSize="ColumnSize.Is3">
+                <Button Color="Color.Primary" Clicked="OnSelectStreet">Выбрать все кв. на улице</Button>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is1" />
+            <Column ColumnSize="ColumnSize.Is3">
+                <Button Color="Color.Primary" Clicked="OnSelectHouse">Выбрать все кв. в доме</Button>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is1" />
+            <Column ColumnSize="ColumnSize.Is3">
+                <Button Color="Color.Primary" Clicked="OnSelectFlat">Выбрать квартиру</Button>
+            </Column>
+        </Row>
+        @if (FlatToGenerate.Count > 0)
+        {
+            <br />
+            <Row>
+                <Column ColumnSize="ColumnSize.Is12">
+                    <h5>Выбрано квартир: @FlatToGenerate.Count</h5>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is2">
+                    <Button Color="Color.Info" Clicked="Generate">Сгенерировать</Button>
+                </Column>
+            </Row>
+            <br />
+            <Row>
+                <Column ColumnSize="ColumnSize.Is4">
+                    <Table Striped="true">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHeaderCell>#</TableHeaderCell>
+                                <TableHeaderCell>Улица</TableHeaderCell>
+                                <TableHeaderCell>Дом</TableHeaderCell>
+                                <TableHeaderCell>Квартира</TableHeaderCell>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            @foreach (var flat in FlatToGenerate)
+                            {
+                                <TableRow>
+                                    <TableRowHeader>@flat.Id</TableRowHeader>
+                                    <TableRowCell>@flat.House.Street.name</TableRowCell>
+                                    <TableRowCell>№. @flat.House.number</TableRowCell>
+                                    <TableRowCell>кв. @flat.Num</TableRowCell>
+                                </TableRow>
+                            }
+                        </TableBody>
+                    </Table>
+                </Column>
+                
+            </Row>
+        }
+        </Container>
+</Layout>
+
+
+@code{
+    List<Street> Streets = new List<Street>();
+    List<House> Houses = new List<House>();
+    List<Flat> Flats = new List<Flat>();
+
+    int selectedStreet = 1;
+    int selectedHouse = 0;
+    int selectedFlat = 0;
+
+    List<Flat> FlatToGenerate = new List<Flat>();
+
+    protected override void OnInitialized()
+    {
+        Streets.AddRange(db.Streets.ToList());
+        PostProcess();
+    }
+
+    void StreetsChangeHandler(object newValue)
+    {
+        selectedStreet = Int32.Parse(newValue.ToString());
+        selectedHouse = 0;
+        selectedFlat = 0;
+        PostProcess();
+    }
+
+    void HousesChangeHandler(object newValue)
+    {
+        selectedHouse = Int32.Parse(newValue.ToString());
+        selectedFlat = 0;
+        PostProcess();
+    }
+
+    void FlatsChangeHandler(object newValue)
+    {
+        selectedFlat = Int32.Parse(newValue.ToString());
+        PostProcess();
+    }
+
+    private void PostProcess()
+    {
+        if(selectedStreet != 0 && selectedHouse == 0 && selectedFlat == 0)
+        {
+            Houses = db.Streets.Include(x => x.Houses).FirstOrDefault(x => x.id == selectedStreet).Houses;
+            selectedHouse = Houses.FirstOrDefault().id;
+            Flats = db.Houses.Include(x => x.Flats).FirstOrDefault(x => x.id == Houses.First().id).Flats;
+            selectedFlat = Flats.FirstOrDefault().Id;
+        }
+        else if(selectedStreet != 0 && selectedHouse != 0 && selectedFlat == 0)
+        {
+            Flats = db.Houses.Include(x => x.Flats).FirstOrDefault(x => x.id == selectedHouse).Flats;
+            selectedFlat = Flats.FirstOrDefault().Id;
+        }
+        StateHasChanged();
+    }
+
+    private void OnSelectFlat(object sender)
+    {
+        if(FlatToGenerate.FirstOrDefault(x => x.Id == selectedFlat) == null)
+        {
+            var fl = Flats.FirstOrDefault(x => x.Id == selectedFlat);
+            fl.House = Houses.FirstOrDefault(x => x.id == selectedHouse);
+            fl.House.Street = Streets.FirstOrDefault(x => x.id == selectedStreet);
+            FlatToGenerate.Add(fl);
+            StateHasChanged();
+        }
+    }
+
+    private void OnSelectHouse(object sender)
+    {
+        var t = Houses.GroupBy(x => x.code);
+        var h = Houses.FirstOrDefault(x => x.id == selectedHouse);
+        h.Street = Streets.FirstOrDefault(x => x.id == selectedStreet);
+
+        foreach (var flat in Flats)
+        {
+            if(FlatToGenerate.FirstOrDefault(x => x.Id == flat.Id) == null)
+            {
+                flat.House = h;
+                FlatToGenerate.Add(flat);
+            }
+        }
+
+        StateHasChanged();
+    }
+
+    private void OnSelectStreet(object sender)
+    {
+        var street = Streets.FirstOrDefault(x => x.id == selectedStreet);
+        var flats = db.Houses.Include(x => x.Flats).Include(x => x.Street).Where(x => x.Street.id == selectedStreet).SelectMany(x => x.Flats).ToList();
+
+        foreach (var flat in flats)
+        {
+            if(FlatToGenerate.FirstOrDefault(x => x.Id == flat.Id) == null)
+            {
+                FlatToGenerate.Add(flat);
+            }
+        }
+
+        StateHasChanged();
+    }
+
+    private void Generate(object sender)
+    {
+        gen.Generate(FlatToGenerate);
+    }
+}

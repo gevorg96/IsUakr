@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using IsUakr.DAL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -26,7 +25,7 @@ namespace IsUark.Mvc.Controllers
             var streets = _db.Streets.Include(p => p.Houses).ToList();
             var hub = _db.MeterHubs.FirstOrDefault(p => p.House.id == streets.FirstOrDefault().Houses.FirstOrDefault().id);
             var meters = _db.Meters.Include(p => p.Flat).Where(p => p.Hub.id == hub.id).ToList();
-            var flats = meters.Select(p => p.Flat).Distinct().OrderBy(p => p.num).ToList();
+            var flats = meters.Select(p => p.Flat).Distinct().OrderBy(p => p.Num).ToList();
             var vm = new AggregateViewModel
             {
                 Streets = streets,

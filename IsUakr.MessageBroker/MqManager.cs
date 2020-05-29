@@ -7,32 +7,30 @@ namespace IsUakr.MessageBroker
 {
     public class MqManager: IMqManager
     {
-        private IMqService mqService;
+        private readonly IMqService mqService;
         private List<MqQueueInfo> exchangesQueues;
+        private readonly QueueInfo _queueInfo;
+        private static object _lock = new object();
 
         public MqManager(IMqService service, QueueInfo queueInfo)
         {
             mqService = service;
+            _queueInfo = queueInfo;
             exchangesQueues = new List<MqQueueInfo>();
-
-            foreach (var queueName in queueInfo.Queues)
-            {
-                exchangesQueues.Add(new MqQueueInfo { ExchangeName = queueInfo.ExchangeName, QueueName = queueName, RoutingKey = queueName });
-            }
         }
 
         private MqQueueInfo CreateNewQueue()
         {
-            var queue = exchangesQueues.FirstOrDefault();
+            var q = _queueInfo.Queues.ToList();
+            q.RemoveAll(p => exchangesQueues.Select(x => x.QueueName).Contains(p));
+            var queueName = q.FirstOrDefault();
+
             var mqInfo = new MqQueueInfo 
             { 
-                ExchangeName = Guid.NewGuid().ToString(), 
-                RoutingKey = Guid.NewGuid().ToString(), 
-                QueueName = Guid.NewGuid().ToString() 
+                ExchangeName = _queueInfo.ExchangeName,
+                RoutingKey = queueName, 
+                QueueName = queueName 
             };
-
-            if (queue != null)
-                mqInfo.ExchangeName = queue.ExchangeName;
 
             mqService.CreateRabbitQueue(mqInfo, exchangesQueues.Count() != 0);
             exchangesQueues.Add(mqInfo);
@@ -43,17 +41,21 @@ namespace IsUakr.MessageBroker
         {
             try
             {
-                var queue = exchangesQueues.FirstOrDefault(x => x.MessageCount < 100);
-
-                if (queue == null)
+                MqQueueInfo queue = null;
+                lock (_lock)
                 {
-                    if (exchangesQueues.Count < 4)
+                    queue = exchangesQueues.FirstOrDefault(x => x.MessageCount < 100);
+
+                    if (queue == null)
                     {
-                        queue = CreateNewQueue();
-                    }
-                    else
-                    {
-                        throw new Exception("Ошибка при создании дополнительной очереди. Необходимо расширить кластер воркеров по обработке данных.");
+                        if (exchangesQueues.Count < 4)
+                        {
+                            queue = CreateNewQueue();
+                        }
+                        else
+                        {
+                            throw new Exception("Ошибка при создании дополнительной очереди. Необходимо расширить кластер воркеров по обработке данных.");
+                        }
                     }
                 }
 
@@ -95,8 +97,19 @@ namespace IsUakr.MessageBroker
                 messageCount += mqService.DeleteQueue(queue.QueueName);
             }
 
+            if (exchangesQueues.FirstOrDefault() != null)
+                DeleteExchange(exchangesQueues.FirstOrDefault().ExchangeName);
+
             exchangesQueues = new List<MqQueueInfo>();
             return messageCount;
+        }
+
+        public void DeleteExchange(string exchangeName)
+        {
+            mqService.UsingConnection(channel =>
+            {
+                channel.ExchangeDelete(exchangeName, false);
+            });
         }
     }
 }

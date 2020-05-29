@@ -18,8 +18,10 @@ namespace IsUakr.MessageBroker
         {
             if (_factory == null)
             {
-                _factory = new ConnectionFactory();
-                _factory.Uri = new Uri(_uri);
+                _factory = new ConnectionFactory
+                {
+                    Uri = new Uri(_uri)
+                };
             }
 
             return _factory;
@@ -31,16 +33,15 @@ namespace IsUakr.MessageBroker
             {
                 (string exchangeName, string routingKey, string queueName, bool durable, bool exclusive, bool autoDelete) = mqInfo;
 
-                using (var conn = CreateFactory().CreateConnection())
+                using var conn = CreateFactory().CreateConnection();
+                using var channel = conn.CreateModel();
+                if (!exchangeExist)
                 {
-                    using (var channel = conn.CreateModel())
-                    {
-                        if(!exchangeExist)
-                            channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
-                        DeclareQueue(channel, queueName, durable, exclusive, autoDelete);
-                        channel.QueueBind(queueName, exchangeName, routingKey, null);
-                    }
+                    channel.ExchangeDelete(exchangeName);
+                    channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
                 }
+                DeclareQueue(channel, queueName, durable, exclusive, autoDelete);
+                channel.QueueBind(queueName, exchangeName, routingKey, null);
             }
             catch (Exception ex)
             {
@@ -53,16 +54,12 @@ namespace IsUakr.MessageBroker
             (string exchangeName, string routingKey, string queueName, bool durable, bool exclusive, bool autoDelete) = mqInfo;
             try
             {
-                using (IConnection connection = CreateFactory().CreateConnection())
-                {
-                    using (var channel = connection.CreateModel())
-                    {
-                        //if(queueName != null)
-                        //    DeclareQueue(channel, queueName, durable, exclusive, autoDelete);
-                        
-                        channel.BasicPublish(exchangeName, routingKey, null, Encoding.UTF8.GetBytes(data));
-                    }
-                }
+                using IConnection connection = CreateFactory().CreateConnection();
+                using var channel = connection.CreateModel();
+                //if(queueName != null)
+                //    DeclareQueue(channel, queueName, durable, exclusive, autoDelete);
+
+                channel.BasicPublish(exchangeName, routingKey, null, Encoding.UTF8.GetBytes(data));
             }
             catch (Exception ex)
             {
@@ -75,19 +72,15 @@ namespace IsUakr.MessageBroker
         {
             try
             {
-                using (IConnection connection = CreateFactory().CreateConnection())
-                {
-                    using (var channel = connection.CreateModel())
-                    {
-                        var consumer = new EventingBasicConsumer(channel);
-                        var result = channel.BasicGet(queueName, true);
+                using IConnection connection = CreateFactory().CreateConnection();
+                using var channel = connection.CreateModel();
+                var consumer = new EventingBasicConsumer(channel);
+                var result = channel.BasicGet(queueName, true);
 
-                        if (result != null)
-                            return Encoding.UTF8.GetString(result.Body.ToArray());
+                if (result != null)
+                    return Encoding.UTF8.GetString(result.Body.ToArray());
 
-                        return string.Empty;
-                    }
-                }
+                return string.Empty;
             }
             catch (Exception ex)
             {
@@ -99,13 +92,9 @@ namespace IsUakr.MessageBroker
         {
             try
             {
-                using (IConnection connection = CreateFactory().CreateConnection())
-                {
-                    using (var channel = connection.CreateModel())
-                    {
-                        return channel.QueueDelete(queueName, false, false);
-                    }
-                }
+                using IConnection connection = CreateFactory().CreateConnection();
+                using var channel = connection.CreateModel();
+                return channel.QueueDelete(queueName, false, false);
             }
             catch (Exception ex)
             {
@@ -117,13 +106,9 @@ namespace IsUakr.MessageBroker
         {
             try
             {
-                using (IConnection connection = CreateFactory().CreateConnection())
-                {
-                    using (var channel = connection.CreateModel())
-                    {
-                        channel.ExchangeDelete(exchangeName, false);
-                    }
-                }
+                using IConnection connection = CreateFactory().CreateConnection();
+                using var channel = connection.CreateModel();
+                channel.ExchangeDelete(exchangeName, false);
             }
             catch (Exception ex)
             {
@@ -135,13 +120,9 @@ namespace IsUakr.MessageBroker
         {
             try
             {
-                using (IConnection connection = CreateFactory().CreateConnection())
-                {
-                    using (var channel = connection.CreateModel())
-                    {
-                        action(channel);
-                    }
-                }
+                using IConnection connection = CreateFactory().CreateConnection();
+                using var channel = connection.CreateModel();
+                action(channel);
             }
             catch (Exception ex)
             {

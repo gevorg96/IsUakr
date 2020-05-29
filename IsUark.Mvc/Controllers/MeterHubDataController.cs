@@ -8,7 +8,7 @@ namespace IsUark.Mvc.Controllers
     public class MeterHubDataController : Controller
     {
         [HttpPost]
-        public async Task<OkResult> Post([FromBody] MeterHubData data)
+        public OkResult Post([FromBody] MeterHubData data)
         {
             return Ok();
         }

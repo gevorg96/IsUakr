@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using System;
+using System.Reflection;
+using System.Xml.Linq;
 
 namespace IsUakr.MessageBroker.Tests
 {
@@ -10,7 +12,12 @@ namespace IsUakr.MessageBroker.Tests
         [SetUp]
         public void Setup()
         {
-            mqService = new MqService(@"amqp://ilaoklcx:OfEMmmsEpt6hYDhL_jj3F19cv5H4idWL@squid.rmq.cloudamqp.com/ilaoklcx");
+            var ass = Assembly.GetExecutingAssembly();
+            var stream = ass.GetManifestResourceStream(ass.GetManifestResourceNames()[0]);
+            var config = XDocument.Load(stream);
+
+            var rabbitConn = config.Root.Element("connectionStrings").Element("add").Attribute("connectionString").Value;
+            mqService = new MqService(rabbitConn);
         }
 
         private MqQueueInfo GenerateQueueInfo() => new MqQueueInfo { ExchangeName = Guid.NewGuid().ToString(), RoutingKey = Guid.NewGuid().ToString(), QueueName = Guid.NewGuid().ToString() };

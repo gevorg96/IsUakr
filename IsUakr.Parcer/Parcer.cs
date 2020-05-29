@@ -131,8 +131,6 @@ namespace IsUakr.Parcer
                     }
                 }
 
-
-                
                 foreach (var house in db.Houses.ToList())
                 {
                     var meterHub = new MeterHub
@@ -146,7 +144,7 @@ namespace IsUakr.Parcer
                     {
                         var flat = new Flat
                         {
-                            num = (i + 1).ToString(),
+                            Num = (i + 1).ToString(),
                             House = house
                         };
                         db.Flats.Add(flat);

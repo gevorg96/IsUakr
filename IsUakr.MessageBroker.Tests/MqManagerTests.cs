@@ -1,16 +1,25 @@
 ﻿using NUnit.Framework;
+using System.Linq;
+using System.Reflection;
+using System.Xml.Linq;
 
 namespace IsUakr.MessageBroker.Tests
 {
     public class MqManagerTests
     {
         private IMqManager mqManager;
-
+        private string exchangeName;
         [SetUp]
         public void Setup()
         {
-            var mqService = new MqService(@"amqp://ilaoklcx:OfEMmmsEpt6hYDhL_jj3F19cv5H4idWL@squid.rmq.cloudamqp.com/ilaoklcx");
-            mqManager = new MqManager(mqService);
+            var ass = Assembly.GetExecutingAssembly();
+            var stream = ass.GetManifestResourceStream(ass.GetManifestResourceNames()[0]);
+            var config = XDocument.Load(stream);
+
+            var rabbitConn = config.Root.Element("connectionStrings").Element("add").Attribute("connectionString").Value;
+            exchangeName = config.Root.Element("rabbitConfiguration").Element("exchangeName").Attribute("name").Value;
+            var queues = config.Root.Element("rabbitConfiguration").Element("queues").Elements().Select(p => p.Attribute("value").Value);
+            mqManager = new MqManager(new MqService(rabbitConn), new Helpers.QueueInfo(exchangeName, queues.ToList()));
         }
 
         [Test]
@@ -26,6 +35,7 @@ namespace IsUakr.MessageBroker.Tests
             finally
             {
                 mqManager.DeleteQueues();
+                mqManager.DeleteExchange(exchangeName);
             }
         }
 
@@ -43,6 +53,7 @@ namespace IsUakr.MessageBroker.Tests
             finally
             {
                 mqManager.DeleteQueues();
+                mqManager.DeleteExchange(exchangeName);
             }
         }
 
@@ -65,6 +76,7 @@ namespace IsUakr.MessageBroker.Tests
             finally
             {
                 mqManager.DeleteQueues();
+                mqManager.DeleteExchange(exchangeName);
             }
         }
     }

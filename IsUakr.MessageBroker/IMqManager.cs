@@ -11,5 +11,7 @@ namespace IsUakr.MessageBroker
         void ClearQueues();
 
         uint DeleteQueues();
+
+        void DeleteExchange(string exchangeName);
     }
 }
