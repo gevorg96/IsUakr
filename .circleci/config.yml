@@ -9,7 +9,7 @@ jobs:
       - run: |
           docker info
           docker build -t aspnetapp -f Dockerfile_web .
-          docker build -t aspnetworker -f Dockerfile_worker
+          docker build -t aspnetworker -f Dockerfile_worker .
       # deploy the image
       - run: |
           docker login --username=$HEROKU_USERNAME --password=$HEROKU_API_KEY registry.heroku.com
