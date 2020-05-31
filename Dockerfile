@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build-env
 WORKDIR /app
 
 COPY *.Mvc/*.Mvc.csproj ./
-RUN dotnet restore *.Mvc.csproj
+RUN dotnet restore IsUakr.Mvc.csproj
 
 COPY . ./
 RUN dotnet publish *.Mvc/*.Mvc.csproj -c Release -o out
