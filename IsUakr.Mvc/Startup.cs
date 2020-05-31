@@ -32,8 +32,8 @@ namespace IsUark.Mvc
             services.AddMqServices(mqConnString);
 
 
-            var parcer = new Parcer(dbConnString);
-            parcer.RunAsync();
+            //var parcer = new Parcer(dbConnString);
+            //parcer.RunAsync();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
