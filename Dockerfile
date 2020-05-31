@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY IsUakr.Mvc/IsUakr.csproj ./
+COPY IsUakr.Mvc/IsUakr.Mvc.csproj ./
 RUN dotnet restore
 
 # Copy everything else and build
