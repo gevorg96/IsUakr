@@ -2,65 +2,83 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace IsUakr.MessageBroker
 {
     public class MqManager: IMqManager
     {
         private readonly IMqService mqService;
-        private List<MqQueueInfo> exchangesQueues;
-        private readonly QueueInfo _queueInfo;
+        private static List<MqQueueInfo> exchangesQueues;
+        private static short counter = 0;
+        //private readonly QueueInfo _queueInfo;
         private static object _lock = new object();
 
         public MqManager(IMqService service, QueueInfo queueInfo)
         {
             mqService = service;
-            _queueInfo = queueInfo;
+            //_queueInfo = queueInfo;
             exchangesQueues = new List<MqQueueInfo>();
+            foreach (var queue in queueInfo.Queues)
+            {
+                exchangesQueues.Add(new MqQueueInfo { ExchangeName = queueInfo.ExchangeName, RoutingKey = queue, QueueName = queue });
+            }
+            RefreshQueuesInfo();
         }
 
-        private MqQueueInfo CreateNewQueue()
-        {
-            var q = _queueInfo.Queues.ToList();
-            q.RemoveAll(p => exchangesQueues.Select(x => x.QueueName).Contains(p));
-            var queueName = q.FirstOrDefault();
+        //private MqQueueInfo CreateNewQueue()
+        //{
+        //    var q = _queueInfo.Queues.ToList();
+        //    q.RemoveAll(p => exchangesQueues.Select(x => x.QueueName).Contains(p));
+        //    var queueName = q.FirstOrDefault();
 
-            var mqInfo = new MqQueueInfo 
-            { 
-                ExchangeName = _queueInfo.ExchangeName,
-                RoutingKey = queueName, 
-                QueueName = queueName 
-            };
+        //    var mqInfo = new MqQueueInfo 
+        //    { 
+        //        ExchangeName = _queueInfo.ExchangeName,
+        //        RoutingKey = queueName, 
+        //        QueueName = queueName 
+        //    };
 
-            mqService.CreateRabbitQueue(mqInfo, exchangesQueues.Count() != 0);
-            exchangesQueues.Add(mqInfo);
-            return mqInfo;
-        }
+        //    mqService.CreateRabbitQueue(mqInfo, exchangesQueues.Count() != 0);
+        //    exchangesQueues.Add(mqInfo);
+        //    return mqInfo;
+        //}
 
         public void PublishMessage(string message)
         {
             try
             {
                 MqQueueInfo queue = null;
-                lock (_lock)
-                {
-                    queue = exchangesQueues.FirstOrDefault(x => x.MessageCount < 100);
+                queue = exchangesQueues.FirstOrDefault(x => x.MessageCount < 100);
 
-                    if (queue == null)
-                    {
-                        if (exchangesQueues.Count < 4)
-                        {
-                            queue = CreateNewQueue();
-                        }
-                        else
-                        {
-                            throw new Exception("Ошибка при создании дополнительной очереди. Необходимо расширить кластер воркеров по обработке данных.");
-                        }
-                    }
+                //if (queue == null)
+                //{
+                //    lock (_lock)
+                //    {
+
+                //        if (exchangesQueues.Count < 4)
+                //        {
+                //            queue = CreateNewQueue();
+                //        }
+                //        else
+                //        {
+                //            throw new Exception("Ошибка при создании дополнительной очереди. Необходимо расширить кластер воркеров по обработке данных.");
+                //        }
+                //    }
+                //}
+
+                counter++;
+                if(counter == 19)
+                {
+                    Monitor.Enter(_lock);
+                }
+                else
+                {
+
                 }
 
                 mqService.Send(message, queue);
-                queue.MessageCount++;
+                //queue.MessageCount++;
             }
             catch (Exception ex)
             {

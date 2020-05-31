@@ -82,14 +82,35 @@
                         </TableBody>
                     </Table>
                 </Column>
-                
+
             </Row>
         }
-        </Container>
+        <Snackbar @ref="snackbarError" Color="SnackbarColor.Danger" Location="SnackbarLocation.Right">
+            <SnackbarBody>
+                Возникла ошибка при отправке на сервер
+            </SnackbarBody>
+        </Snackbar>
+        <Snackbar @ref="snackbarSuccess" Color="SnackbarColor.Success" Location="SnackbarLocation.Right">
+            <SnackbarBody>
+                Успешно!
+            </SnackbarBody>
+        </Snackbar>
+        <Snackbar @ref="snackbar" Color="SnackbarColor.Info" Location="SnackbarLocation.Right">
+            <SnackbarBody>
+                @intermediateMessage
+            </SnackbarBody>
+        </Snackbar>
+    </Container>
 </Layout>
 
 
-@code{
+@code
+{
+    private string intermediateMessage = "";
+    Snackbar snackbarError;
+    Snackbar snackbarSuccess;
+    Snackbar snackbar;
+
     List<Street> Streets = new List<Street>();
     List<House> Houses = new List<House>();
     List<Flat> Flats = new List<Flat>();
@@ -129,14 +150,14 @@
 
     private void PostProcess()
     {
-        if(selectedStreet != 0 && selectedHouse == 0 && selectedFlat == 0)
+        if (selectedStreet != 0 && selectedHouse == 0 && selectedFlat == 0)
         {
             Houses = db.Streets.Include(x => x.Houses).FirstOrDefault(x => x.id == selectedStreet).Houses;
             selectedHouse = Houses.FirstOrDefault().id;
             Flats = db.Houses.Include(x => x.Flats).FirstOrDefault(x => x.id == Houses.First().id).Flats;
             selectedFlat = Flats.FirstOrDefault().Id;
         }
-        else if(selectedStreet != 0 && selectedHouse != 0 && selectedFlat == 0)
+        else if (selectedStreet != 0 && selectedHouse != 0 && selectedFlat == 0)
         {
             Flats = db.Houses.Include(x => x.Flats).FirstOrDefault(x => x.id == selectedHouse).Flats;
             selectedFlat = Flats.FirstOrDefault().Id;
@@ -146,7 +167,7 @@
 
     private void OnSelectFlat(object sender)
     {
-        if(FlatToGenerate.FirstOrDefault(x => x.Id == selectedFlat) == null)
+        if (FlatToGenerate.FirstOrDefault(x => x.Id == selectedFlat) == null)
         {
             var fl = Flats.FirstOrDefault(x => x.Id == selectedFlat);
             fl.House = Houses.FirstOrDefault(x => x.id == selectedHouse);
@@ -164,7 +185,7 @@
 
         foreach (var flat in Flats)
         {
-            if(FlatToGenerate.FirstOrDefault(x => x.Id == flat.Id) == null)
+            if (FlatToGenerate.FirstOrDefault(x => x.Id == flat.Id) == null)
             {
                 flat.House = h;
                 FlatToGenerate.Add(flat);
@@ -181,7 +202,7 @@
 
         foreach (var flat in flats)
         {
-            if(FlatToGenerate.FirstOrDefault(x => x.Id == flat.Id) == null)
+            if (FlatToGenerate.FirstOrDefault(x => x.Id == flat.Id) == null)
             {
                 FlatToGenerate.Add(flat);
             }
@@ -192,6 +213,23 @@
 
     private void Generate(object sender)
     {
-        gen.Generate(FlatToGenerate);
+        intermediateMessage = "Генерирование данных...";
+        snackbar.Show();
+        var messages = gen.Generate(FlatToGenerate);
+        intermediateMessage = "Сгенерированных сообщений: " + messages.Count;
+        snackbar.Show();
+        if (messages.Count > 0)
+        {
+            intermediateMessage = "Сгенерированных сообщений: " + messages.Count + "\nОтправка на сервер...";
+            snackbar.Show();
+            if (gen.SendToServer(messages))
+            {
+                snackbarSuccess.Show();
+            }
+            else
+            {
+                snackbarError.Show();
+            }
+        }
     }
 }

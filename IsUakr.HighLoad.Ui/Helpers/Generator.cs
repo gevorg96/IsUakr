@@ -1,4 +1,5 @@
-﻿using IsUakr.DAL;
+﻿using Blazorise.Snackbar;
+using IsUakr.DAL;
 using IsUakr.Entities.Messages;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,25 +23,15 @@ namespace IsUakr.HighLoad.Ui.Helpers
         {
             _url = url;
             _db = db;
-            ConfigureCores();
         }
 
-        private void ConfigureCores()
-        {
-            _cores = Environment.ProcessorCount;
-        }
-
-        public void Generate(IEnumerable<Flat> flats)
+        public List<HubMessage> Generate(IEnumerable<Flat> flats)
         {
             var groups = flats.GroupBy(x => x.House);
-            Task<List<HubMessage>>[] tasks;
-            if (groups.Count() < _cores)
-                tasks = new Task<List<HubMessage>>[groups.Count()];
-            else
-                tasks = new Task<List<HubMessage>>[_cores];
 
             var rnd = new Random();
             var hubMessages = new List<HubMessage>();
+
 
             Parallel.ForEach(groups, group =>
             {
@@ -50,7 +41,7 @@ namespace IsUakr.HighLoad.Ui.Helpers
 
                 lock (_lock)
                 {
-                    hub = _db.MeterHubs.Include(p => p.Meters).FirstOrDefault(p => p.House.id == group.Key.id);
+                    hub = _db.MeterHubs.FirstOrDefault(p => p.House.id == group.Key.id);
                     meters = _db.Meters.Include(p => p.Flat).Where(p => p.Hub.id == hub.id).ToList();
                     flts = meters.Select(p => p.Flat).Distinct().OrderBy(p => p.Num).ToList();
                 }
@@ -88,13 +79,25 @@ namespace IsUakr.HighLoad.Ui.Helpers
                 }
                 hubMessages.Add(hubMessage);
             });
+            return hubMessages;
+        }
 
-            Parallel.ForEach(hubMessages, mess =>
+        public bool SendToServer(IEnumerable<HubMessage> hubMessages)
+        {
+            try
             {
-                var http = new HttpClient();
-                var content = new StringContent(mess.ToString(), Encoding.UTF8, "application/json");
-                http.PostAsync("http://localhost:50826/api/Message", content);
-            });
+                Parallel.ForEach(hubMessages, mess =>
+                {
+                    var http = new HttpClient();
+                    var content = new StringContent(mess.ToString(), Encoding.UTF8, "application/json");
+                    http.PostAsync("http://localhost:50826/api/Message", content);
+                });
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         private short GetMeterType(string type)
