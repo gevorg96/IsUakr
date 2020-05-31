@@ -1,0 +1,7 @@
+build:
+  docker:
+    mvc: IsUakr.Mvc/Dockerfile
+    
+run:
+  mvc: dotnet run IsUakr.Mvc.dll
+  

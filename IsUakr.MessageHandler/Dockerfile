@@ -1,9 +1,12 @@
-FROM mcr.microsoft.com/dotnet/core/runtime:3.0-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["IsUakr.MessageHandler/IsUakr.MessageHandler.csproj", "IsUakr.MessageHandler/"]
+COPY ["IsUakr.MessageBroker/IsUakr.MessageBroker.csproj", "IsUakr.MessageBroker/"]
+COPY ["IsUakr.MessageHandler.DAL/IsUakr.MessageHandler.DAL.csproj", "IsUakr.MessageHandler.DAL/"]
+COPY ["IsUakr.Entities/IsUakr.Entities.csproj", "IsUakr.Entities/"]
 RUN dotnet restore "IsUakr.MessageHandler/IsUakr.MessageHandler.csproj"
 COPY . .
 WORKDIR "/src/IsUakr.MessageHandler"

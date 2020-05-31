@@ -6,6 +6,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["IsUakr.HighLoad.Ui/IsUakr.HighLoad.Ui.csproj", "IsUakr.HighLoad.Ui/"]
+COPY ["IsUakr.DAL/IsUakr.DAL.csproj", "IsUakr.DAL/"]
+COPY ["IsUakr.Entities/IsUakr.Entities.csproj", "IsUakr.Entities/"]
 RUN dotnet restore "IsUakr.HighLoad.Ui/IsUakr.HighLoad.Ui.csproj"
 COPY . .
 WORKDIR "/src/IsUakr.HighLoad.Ui"
