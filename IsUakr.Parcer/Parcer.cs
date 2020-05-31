@@ -21,115 +21,106 @@ namespace IsUakr.Parcer
             this.conn = conn;
         }
 
-        public void Run()
+        public async Task RunAsync()
         {
-            /*var housesUrl = @"http://dom.mingkh.ru";
+            //var housesUrl = @"http://dom.mingkh.ru";
 
-            var housesResponse = await LoadData(housesUrl + "/api/houses");
-            var housesJObject = JsonConvert.DeserializeObject<DataGO>(housesResponse);
-            var housesList = new List<House>();
-            foreach (var house in housesJObject.rows)
-            {
-                var h = new House
-                {
-                    id = house.rownumber,
-                    square = house.square != "Незаполнено" ? Convert.ToDouble(house.square.Replace(".", ",")) : 0,
-                    address = house.address,
-                    year = house.year != "Не заполнено" ? Convert.ToInt32(house.year) : 0,
-                    manageStartDate = house.managestartdate != "Не заполнено"
-                        ? Convert.ToDateTime(house.managestartdate)
-                        : DateTime.MinValue,
-                    num = Convert.ToInt32(house.url.Split('/').Last()),
-                    floors = house.floors != "Не заполнено" ? Convert.ToInt32(house.floors) : 0
-                };
+            //var housesResponse = await LoadData(housesUrl + "/api/houses");
+            //var housesJObject = JsonConvert.DeserializeObject<DataGO>(housesResponse);
+            //var housesList = new List<House>();
+            //foreach (var house in housesJObject.rows)
+            //{
+            //    var h = new House
+            //    {
+            //        id = house.rownumber,
+            //        square = house.square != "Незаполнено" ? Convert.ToDouble(house.square.Replace(".", ",")) : 0,
+            //        fullAddress = house.address,
+            //        year = house.year != "Не заполнено" ? Convert.ToInt32(house.year) : 0,
+            //        manageStartDate = house.managestartdate != "Не заполнено"
+            //            ? Convert.ToDateTime(house.managestartdate)
+            //            : DateTime.MinValue,
+            //        number = house.url.Split('/').Last(),
+            //        floors = house.floors != "Не заполнено" ? Convert.ToInt32(house.floors) : 0
+            //    };
 
-                var result = await LoadPage(housesUrl + house.url) as string;
-                HtmlDocument hap = new HtmlDocument();
-                hap.LoadHtml(result);
-                var dtnodes = hap.DocumentNode.SelectNodes("//dt");
-                var ddnodes = hap.DocumentNode.SelectNodes("//dd");
+            //    var result = await LoadPage(housesUrl + house.url) as string;
+            //    HtmlDocument hap = new HtmlDocument();
+            //    hap.LoadHtml(result);
+            //    var dtnodes = hap.DocumentNode.SelectNodes("//dt");
+            //    var ddnodes = hap.DocumentNode.SelectNodes("//dd");
 
-                var idx = 0;
-                for (int i = 0; i < dtnodes.Count; i++)
-                {
-                    if (dtnodes[i].InnerHtml == "Жилых помещений")
-                    {
-                        idx = i;
-                        break;
-                    }
-                }
+            //    var idx = 0;
+            //    for (int i = 0; i < dtnodes.Count; i++)
+            //    {
+            //        if (dtnodes[i].InnerHtml == "Жилых помещений")
+            //        {
+            //            idx = i;
+            //            break;
+            //        }
+            //    }
 
-                int flats = 0;
-                var isConverted = Int32.TryParse(ddnodes[idx].InnerHtml, out flats);
-                if (isConverted)
-                {
-                    h.flatsCount = flats;
-                    housesList.Add(h);
-                }
-            }*/
+            //    int flats = 0;
+            //    var isConverted = Int32.TryParse(ddnodes[idx].InnerHtml, out flats);
+            //    if (isConverted)
+            //    {
+            //        h.flatsCount = flats;
+            //        housesList.Add(h);
+            //    }
+            //}
 
             using (var db = new NpgDbContext(conn))
             {
+                //foreach (var h in housesList)
+                //{
+                //    var (streetStr, houseStr) = GetStreetAndHouse(h.fullAddress);
 
+                //    var streetDal = db.Streets.FirstOrDefault(p => p.name == streetStr);
 
-                using (var sr = new StreamReader(@"d:\data\houses.csv"))
-                {
-                    var str = sr.ReadLine();
-                    while (!string.IsNullOrEmpty(str))
-                    {
-                        var parts = str.Split('\t');
+                //    if (streetDal != null)
+                //    {
+                //        var house = new House
+                //        {
+                //            number = houseStr,
+                //            square = Convert.ToDouble(h.square),
+                //            year = Convert.ToInt32(h.year),
+                //            code = Convert.ToInt32(h.code),
+                //            floors = Convert.ToInt32(h.floors),
+                //            flatsCount = Convert.ToInt32(h.flatsCount),
+                //            manageStartDate = Convert.ToDateTime(h.manageStartDate),
+                //            Street = streetDal
 
-                        var (streetStr, houseStr) = GetStreetAndHouse(parts[1]);
-
-                        var streetDal = db.Streets.FirstOrDefault(p => p.name == streetStr);
-
-                        if (streetDal != null)
-                        {
-                            var house = new House
-                            {
-                                number = houseStr,
-                                square = Convert.ToDouble(parts[2]),
-                                year = Convert.ToInt32(parts[3]),
-                                code = Convert.ToInt32(parts[4]),
-                                floors = Convert.ToInt32(parts[5]),
-                                flatsCount = Convert.ToInt32(parts[6]),
-                                manageStartDate = Convert.ToDateTime(parts[7]),
-                                Street = streetDal
-                            
-                            };
-                            db.Houses.Add(house);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            var street = new Street
-                            {
-                                name = streetStr
-                            };
-                            db.Streets.Add(street);
-                            db.SaveChanges();
+                //        };
+                //        db.Houses.Add(house);
+                //        db.SaveChanges();
+                //    }
+                //    else
+                //    {
+                //        var street = new Street
+                //        {
+                //            name = streetStr
+                //        };
+                //        db.Streets.Add(street);
+                //        db.SaveChanges();
 
 
 
-                            var house = new House
-                            {
-                                number = houseStr,
-                                square = Convert.ToDouble(parts[2]),
-                                year = Convert.ToInt32(parts[3]),
-                                code = Convert.ToInt32(parts[4]),
-                                floors = Convert.ToInt32(parts[5]),
-                                flatsCount = Convert.ToInt32(parts[6]),
-                                manageStartDate = Convert.ToDateTime(parts[7]),
-                                Street = db.Streets.FirstOrDefault(p => p.name == streetStr)
+                //        var house = new House
+                //        {
+                //            number = houseStr,
+                //            square = Convert.ToDouble(h.square),
+                //            year = Convert.ToInt32(h.year),
+                //            code = Convert.ToInt32(h.code),
+                //            floors = Convert.ToInt32(h.floors),
+                //            flatsCount = Convert.ToInt32(h.flatsCount),
+                //            manageStartDate = Convert.ToDateTime(h.manageStartDate),
+                //            Street = db.Streets.FirstOrDefault(p => p.name == streetStr)
 
-                            };
-                            db.Houses.Add(house);
-                            db.SaveChanges();
-                        }
-                        str = sr.ReadLine();
+                //        };
+                //        db.Houses.Add(house);
+                //        db.SaveChanges();
+                //    }
+                //}
 
-                    }
-                }
 
                 foreach (var house in db.Houses.ToList())
                 {
@@ -139,7 +130,7 @@ namespace IsUakr.Parcer
                         code = Guid.NewGuid().ToString()
                     };
                     db.MeterHubs.Add(meterHub);
-                    
+
                     for (int i = 0; i < house.flatsCount; i++)
                     {
                         var flat = new Flat
@@ -180,11 +171,8 @@ namespace IsUakr.Parcer
                 }
 
                 db.SaveChanges();
-
             }
-            
         }
-
 
         static async Task<string> LoadData(string url)
         {

@@ -4,7 +4,7 @@ namespace IsUakr.DAL
 {
     public sealed class NpgDbContext: DbContext
     {
-        private string connectionString;
+        private readonly string connectionString;
         public DbSet<House> Houses { get; set; }
         public DbSet<Flat> Flats { get; set; }
         public DbSet<MeterHub> MeterHubs { get; set; }
@@ -14,7 +14,7 @@ namespace IsUakr.DAL
         public NpgDbContext(string conn)
         {
             connectionString = conn;
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
          
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

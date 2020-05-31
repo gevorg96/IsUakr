@@ -8,6 +8,7 @@ namespace IsUakr.DAL
         public int id { get; set; }
         public string number { get; set; }
         public double? square{ get; set; }
+        public string fullAddress { get; set; }
         public int? year { get; set; }
         public int? floors { get; set; }
         public int code { get; set; }
