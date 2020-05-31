@@ -31,7 +31,7 @@ namespace IsUakr.HighLoad.Ui
               .AddBootstrapProviders()
               .AddFontAwesomeIcons();
 
-            var dbContext = new NpgDbContext(Configuration.GetConnectionString("isuark_db"));
+            var dbContext = new NpgDbContext(Configuration.GetConnectionString("IsUakr_db"));
             services.AddSingleton(o => dbContext);
             services.AddSingleton(x => new Generator(null, dbContext));
             services.AddRazorPages();

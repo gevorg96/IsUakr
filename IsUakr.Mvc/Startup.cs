@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 
-namespace IsUark.Mvc
+namespace IsUakr.Mvc
 {
     public class Startup
     {
@@ -22,7 +22,7 @@ namespace IsUark.Mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var dbConnString = Configuration.GetConnectionString("isuark_db");
+            var dbConnString = Configuration.GetConnectionString("IsUakr_db");
             var mqConnString = Configuration.GetConnectionString("rabbit_mq");
             var exchangeName = Configuration.GetSection("RabbitConfiguration").GetValue<string>("exchangeName");
             var queueNames = Configuration.GetSection("RabbitConfiguration").GetSection("queues").Get<IList<string>>();

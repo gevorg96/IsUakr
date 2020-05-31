@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IsUark.Mvc.Models
+namespace IsUakr.Mvc.Models
 {
     public class MeterHubJson
     {

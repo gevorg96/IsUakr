@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IsUark.Mvc\IsUark.Mvc.csproj" />
+    <ProjectReference Include="..\IsUakr.Mvc\IsUakr.Mvc.csproj" />
   </ItemGroup>
 
 </Project>

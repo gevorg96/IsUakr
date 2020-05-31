@@ -3,7 +3,7 @@ using IsUakr.MessageBroker;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace IsUark.Mvc.Controllers
+namespace IsUakr.Mvc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,10 +1,10 @@
 using System.Linq;
 using IsUakr.DAL;
-using IsUark.Mvc.Models;
+using IsUakr.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace IsUark.Mvc.Controllers
+namespace IsUakr.Mvc.Controllers
 {
     [Route("api/meters")]
     public class MetersController

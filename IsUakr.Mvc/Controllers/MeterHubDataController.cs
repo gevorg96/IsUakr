@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using IsUark.Mvc.Models;
+using IsUakr.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IsUark.Mvc.Controllers
+namespace IsUakr.Mvc.Controllers
 {
     [Route("api/meterhubdata")]
     public class MeterHubDataController : Controller

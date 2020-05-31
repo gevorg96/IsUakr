@@ -17,7 +17,7 @@ namespace IsUakr.MessageHandler
                 .ConfigureServices((hostContext, services) =>
                 {
                     var rabbitConn = hostContext.Configuration.GetSection("ConnectionStrings:rabbit_mq").Value;
-                    var dbConn = hostContext.Configuration.GetSection("ConnectionStrings:isuark_db").Value;
+                    var dbConn = hostContext.Configuration.GetSection("ConnectionStrings:IsUakr_db").Value;
 
                     services.AddSingleton(x => new Queue ("queue1", dbConn));
                     services.AddSingleton<IMqService>(x => new MqService(rabbitConn));

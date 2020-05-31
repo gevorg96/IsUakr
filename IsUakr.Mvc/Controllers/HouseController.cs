@@ -3,7 +3,7 @@ using System.Linq;
 using IsUakr.DAL;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IsUark.Mvc.Controllers
+namespace IsUakr.Mvc.Controllers
 {
     [Route("api/houses")]
     public class HouseController : Controller

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using IsUakr.DAL;
 
-namespace IsUark.Mvc.Models
+namespace IsUakr.Mvc.Models
 {
     public class AggregateViewModel
     {

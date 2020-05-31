@@ -1,4 +1,4 @@
-namespace IsUark.Mvc.Models
+namespace IsUakr.Mvc.Models
 {
     public class MeterHubState
     {

@@ -1,6 +1,6 @@
 using IsUakr.Entities.Messages;
 using IsUakr.MessageBroker;
-using IsUark.Mvc.Controllers;
+using IsUakr.Mvc.Controllers;
 using NUnit.Framework;
 using System;
 using System.Configuration;

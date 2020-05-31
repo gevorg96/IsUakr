@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace IsUark.Mvc
+namespace IsUakr.Mvc
 {
     public class Program
     {

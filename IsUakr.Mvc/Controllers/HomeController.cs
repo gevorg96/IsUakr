@@ -4,10 +4,10 @@ using System.Linq;
 using IsUakr.DAL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using IsUark.Mvc.Models;
+using IsUakr.Mvc.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace IsUark.Mvc.Controllers
+namespace IsUakr.Mvc.Controllers
 {
 
     public class HomeController : Controller

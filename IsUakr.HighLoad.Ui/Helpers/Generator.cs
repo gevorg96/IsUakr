@@ -15,9 +15,8 @@ namespace IsUakr.HighLoad.Ui.Helpers
     {
         private readonly string _url;
         private readonly NpgDbContext _db;
-        private int _cores;
 
-        private object _lock = new object();
+        private readonly object _lock = new object();
 
         public Generator(string url, NpgDbContext db)
         {
