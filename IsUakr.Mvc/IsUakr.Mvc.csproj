@@ -19,12 +19,14 @@
       <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
       <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\IsUakr.DAL\IsUakr.DAL.csproj" />
       <ProjectReference Include="..\IsUakr.Entities\IsUakr.Entities.csproj" />
       <ProjectReference Include="..\IsUakr.MessageBroker\IsUakr.MessageBroker.csproj" />
+      <ProjectReference Include="..\IsUakr.MessageHandler\IsUakr.MessageHandler.csproj" />
       <ProjectReference Include="..\IsUakr.Parcer\IsUakr.Parcer.csproj" />
     </ItemGroup>
 

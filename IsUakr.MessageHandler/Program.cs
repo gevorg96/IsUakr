@@ -19,7 +19,7 @@ namespace IsUakr.MessageHandler
                     var rabbitConn = hostContext.Configuration.GetSection("ConnectionStrings:rabbit_mq").Value;
                     var dbConn = hostContext.Configuration.GetSection("ConnectionStrings:IsUakr_db").Value;
 
-                    services.AddSingleton(x => new Queue ("queue1", dbConn));
+                    services.AddSingleton(x => new ConnStrProvider("queue0", dbConn, rabbitConn));
                     services.AddSingleton<IMqService>(x => new MqService(rabbitConn));
                     services.AddSingleton<IDecisionMaker>(x => new FlatDecisionMaker(dbConn));
                     services.AddSingleton<IProcessor, MessageProcessor>();

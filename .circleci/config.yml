@@ -8,14 +8,13 @@ jobs:
       # build image
       - run: |
           docker info
-          docker build -t aspnetapp -f Dockerfile_web .
-          docker build -t aspnetworker -f Dockerfile_worker .
+          docker login --username=$HEROKU_USERNAME --password=$HEROKU_API_KEY registry.heroku.com
+          docker build -t aspnetweb -f Dockerfile.web .
+          docker tag aspnetweb registry.heroku.com/$HEROKU_APP_NAME/
+          docker push registry.heroku.com/$HEROKU_APP_NAME/web               
       # deploy the image
       - run: |
           docker login --username=$HEROKU_USERNAME --password=$HEROKU_API_KEY registry.heroku.com
-          docker tag aspnetapp registry.heroku.com/$HEROKU_APP_NAME/web
-          docker tag aspnetworker registry.heroku.com/$HEROKU_APP_NAME/worker
-          docker push registry.heroku.com/$HEROKU_APP_NAME/web               
-          docker push registry.heroku.com/$HEROKU_APP_NAME/worker               
-          curl https://cli-assets.heroku.com/install.sh | sh
-          heroku container:release web worker -a $HEROKU_APP_NAME
+          docker build -t aspnethighload -f Dockerfile.highload .
+          docker tag aspnethighload registry.heroku.com/$HEROKU_APP_NAME/highload
+          docker push registry.heroku.com/$HEROKU_APP_NAME/highload

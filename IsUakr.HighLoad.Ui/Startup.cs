@@ -33,7 +33,7 @@ namespace IsUakr.HighLoad.Ui
 
             var dbContext = new NpgDbContext(Configuration.GetConnectionString("IsUakr_db"));
             services.AddSingleton(o => dbContext);
-            services.AddSingleton(x => new Generator(null, dbContext));
+            services.AddSingleton(x => new Generator(Configuration.GetConnectionString("AppPort"), dbContext));
             services.AddRazorPages();
             services.AddServerSideBlazor();
         }

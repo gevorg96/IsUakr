@@ -4,7 +4,7 @@ namespace IsUakr.MessageBroker
 {
     public interface IMqManager
     {
-        void PublishMessage(string message);
+        string PublishMessage(string message);
         
         void RefreshQueuesInfo();
 

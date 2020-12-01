@@ -1,8 +1,9 @@
-﻿using IsUakr.MessageBroker.Helpers;
+﻿using IsUakr.MessageBroker.Commands;
+using IsUakr.MessageBroker.Helpers;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace IsUakr.MessageBroker
 {
@@ -10,10 +11,9 @@ namespace IsUakr.MessageBroker
     {
         private readonly IMqService mqService;
         private static List<MqQueueInfo> exchangesQueues;
-        private static short counter = 0;
-        //private readonly QueueInfo _queueInfo;
+        private static IModel model;
         private static object _lock = new object();
-
+        
         public MqManager(IMqService service, QueueInfo queueInfo)
         {
             mqService = service;
@@ -26,59 +26,43 @@ namespace IsUakr.MessageBroker
             RefreshQueuesInfo();
         }
 
-        //private MqQueueInfo CreateNewQueue()
-        //{
-        //    var q = _queueInfo.Queues.ToList();
-        //    q.RemoveAll(p => exchangesQueues.Select(x => x.QueueName).Contains(p));
-        //    var queueName = q.FirstOrDefault();
-
-        //    var mqInfo = new MqQueueInfo 
-        //    { 
-        //        ExchangeName = _queueInfo.ExchangeName,
-        //        RoutingKey = queueName, 
-        //        QueueName = queueName 
-        //    };
-
-        //    mqService.CreateRabbitQueue(mqInfo, exchangesQueues.Count() != 0);
-        //    exchangesQueues.Add(mqInfo);
-        //    return mqInfo;
-        //}
-
-        public void PublishMessage(string message)
+        public string PublishMessage(string message)
         {
             try
             {
-                MqQueueInfo queue = null;
-                queue = exchangesQueues.FirstOrDefault(x => x.MessageCount < 100);
+                List<QueueDeclareOk> results = new List<QueueDeclareOk>();
+                var queueName = "queue0";
+                bool res = false;
+                var command = new Command();
 
-                //if (queue == null)
-                //{
-                //    lock (_lock)
-                //    {
-
-                //        if (exchangesQueues.Count < 4)
-                //        {
-                //            queue = CreateNewQueue();
-                //        }
-                //        else
-                //        {
-                //            throw new Exception("Ошибка при создании дополнительной очереди. Необходимо расширить кластер воркеров по обработке данных.");
-                //        }
-                //    }
-                //}
-
-                counter++;
-                if(counter == 19)
+                lock (_lock)
                 {
-                    Monitor.Enter(_lock);
-                }
-                else
-                {
+                    if (model == null)
+                        model = mqService.GetChannel();
 
-                }
+                    var result = model.QueueDeclare(queueName, true, false, false, null);
+                    if (result.MessageCount >= 30)
+                    {
+                        for (int i = 1; i < 13; i++)
+                        {
+                            result = model.QueueDeclare("queue" + i);
 
-                mqService.Send(message, queue);
-                //queue.MessageCount++;
+                            if (result.MessageCount < 30)
+                            {
+                                if (result.MessageCount == 0)
+                                    command.Add(WhatToDo.Add, result.QueueName);
+                                else
+                                    command.Add(WhatToDo.Nothing, result.QueueName);
+                                queueName = result.QueueName;
+                            }
+                        }
+                    }
+
+                    model.QueueBind(result.QueueName, "exchange", result.QueueName, null);
+
+                    mqService.Send(model, message, result.QueueName, "exchange");
+                    return res ? result.QueueName : string.Empty;
+                }
             }
             catch (Exception ex)
             {

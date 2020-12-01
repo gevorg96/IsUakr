@@ -1,6 +1,7 @@
 using IsUakr.DAL;
 using IsUakr.MessageBroker;
 using IsUakr.MessageBroker.Helpers;
+using IsUakr.MessageHandler;
 using IsUakr.Parcer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,8 +28,9 @@ namespace IsUark.Mvc
             var mqConnString = Configuration.GetConnectionString("rabbit_mq");
             var exchangeName = Configuration.GetSection("RabbitConfiguration").GetValue<string>("exchangeName");
             var queueNames = Configuration.GetSection("RabbitConfiguration").GetSection("queues").Get<IList<string>>();
+            services.AddSingleton(x => new ConnStrProvider("", dbConnString, mqConnString ));
             services.AddSingleton(x => new QueueInfo(exchangeName, queueNames));
-            services.AddTransient(o => new NpgDbContext(dbConnString));
+            services.AddSingleton(o => new NpgDbContext(dbConnString));
             services.AddMqServices(mqConnString);
 
 
@@ -37,6 +39,7 @@ namespace IsUark.Mvc
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +58,14 @@ namespace IsUark.Mvc
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSwagger(c =>
+            {
+                c.SerializeAsV2 = true;
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
             app.UseRouting();
 
             app.UseAuthorization();

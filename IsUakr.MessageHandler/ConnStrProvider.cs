@@ -1,15 +1,18 @@
 ﻿namespace IsUakr.MessageHandler
 {
-    public class Queue
+    public class ConnStrProvider
     {
         public string QueueName { get; }
 
         public string DbConnStr { get; }
 
-        public Queue(string queueName, string dbConnStr)
+        public string MqConnStr { get; }
+
+        public ConnStrProvider(string queueName, string dbConnStr, string mqConnStr)
         {
             QueueName = queueName;
             DbConnStr = dbConnStr;
+            MqConnStr = mqConnStr;
         }
     }
 }

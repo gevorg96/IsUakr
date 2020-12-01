@@ -1,5 +1,4 @@
-﻿using Blazorise.Snackbar;
-using IsUakr.DAL;
+﻿using IsUakr.DAL;
 using IsUakr.Entities.Messages;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -89,7 +88,7 @@ namespace IsUakr.HighLoad.Ui.Helpers
                 {
                     var http = new HttpClient();
                     var content = new StringContent(mess.ToString(), Encoding.UTF8, "application/json");
-                    http.PostAsync("http://localhost:50826/api/Message", content);
+                    http.PostAsync(_url, content);
                 });
                 return true;
             }

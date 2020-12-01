@@ -6,8 +6,8 @@ namespace IsUakr.MessageBroker
     {
         public static void AddMqServices(this IServiceCollection serviceCollection, string uri)
         {
-            serviceCollection.AddScoped<IMqService>(x => new MqService(uri));
-            serviceCollection.AddScoped<IMqManager, MqManager>();
+            serviceCollection.AddSingleton<IMqService>(x => new MqService(uri));
+            serviceCollection.AddSingleton<IMqManager, MqManager>();
         }
     }
 }

@@ -5,6 +5,8 @@ namespace IsUakr.MessageBroker
 {
     public interface IMqService
     {
+        IModel GetChannel();
+        void Send(IModel model, string data, string queueName, string exchageName);
         void CreateRabbitQueue(MqQueueInfo mqInfo, bool exchangeExist);
         void Send(string data, MqQueueInfo mqInfo);
         string Receive(string queueName);

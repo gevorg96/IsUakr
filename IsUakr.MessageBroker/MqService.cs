@@ -27,6 +27,11 @@ namespace IsUakr.MessageBroker
             return _factory;
         }
 
+        public IModel GetChannel()
+        {
+            return CreateFactory().CreateConnection().CreateModel();
+        }
+
         public void CreateRabbitQueue(MqQueueInfo mqInfo, bool exchangeExist)
         {
             try
@@ -56,8 +61,6 @@ namespace IsUakr.MessageBroker
             {
                 using IConnection connection = CreateFactory().CreateConnection();
                 using var channel = connection.CreateModel();
-                //if(queueName != null)
-                //    DeclareQueue(channel, queueName, durable, exclusive, autoDelete);
 
                 channel.BasicPublish(exchangeName, routingKey, null, Encoding.UTF8.GetBytes(data));
             }
@@ -66,6 +69,11 @@ namespace IsUakr.MessageBroker
                 throw new Exception("Возникла ошибка во время отправки сообщения в очередь.\n Message: " + ex.Message);
             }
 
+        }
+
+        public void Send(IModel model, string data, string queueName, string exchageName)
+        {
+            model.BasicPublish(exchageName, queueName, null, Encoding.UTF8.GetBytes(data));
         }
 
         public string Receive(string queueName)
