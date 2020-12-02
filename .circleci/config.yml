@@ -7,13 +7,12 @@ jobs:
 
       - run: |
           docker info
-          docker login --username=$HEROKU_USERNAME --password=$HEROKU_API_KEY registry.heroku.com
-          docker build -t aspnetweb -f IsUakr.Mvc/Dockerfile.web .
-          docker tag aspnetweb registry.heroku.com/$HEROKU_APP_NAME/web
-          docker push registry.heroku.com/$HEROKU_APP_NAME/web               
+          docker build -t web -f IsUakr.Mvc/Dockerfile.web .
+          docker build -t highload -f IsUakr.HighLoad.Ui/Dockerfile.highload .
+          docker tag web registry.heroku.com/$HEROKU_APP_NAME/web
+          docker tag highload registry.heroku.com/$HEROKU_APP_NAME/highload
 
-      - run: |
+      - run: |       
           docker login --username=$HEROKU_USERNAME --password=$HEROKU_API_KEY registry.heroku.com
-          docker build -t aspnethighload -f IsUakr.HighLoad.Ui/Dockerfile.highload .
-          docker tag aspnethighload registry.heroku.com/$HEROKU_APP_NAME/highload
+          docker push registry.heroku.com/$HEROKU_APP_NAME/web  
           docker push registry.heroku.com/$HEROKU_APP_NAME/highload
