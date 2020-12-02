@@ -1,6 +1,0 @@
-build:
-  docker:
-    mvc: Dockerfile_web
-    worker: Dockerfile_worker
-
-  
