@@ -7,8 +7,8 @@ jobs:
 
       - run: |
           docker info
-          docker build -t web -f IsUakr.Mvc/Dockerfile.web .
           docker build -t highload -f IsUakr.HighLoad.Ui/Dockerfile.highload .
+          docker build -t web -f IsUakr.Mvc/Dockerfile.web .
           docker tag web registry.heroku.com/$HEROKU_APP_NAME/web
           docker tag highload registry.heroku.com/$HEROKU_APP_NAME/highload
 
