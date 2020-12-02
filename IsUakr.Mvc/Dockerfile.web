@@ -1,10 +1,10 @@
 	FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
-	WORKDIR /app
+	WORKDIR /web
 	EXPOSE 80
 	EXPOSE 443
 	
 	FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
-	WORKDIR /src
+	WORKDIR /src_web
 	COPY ["IsUakr.Mvc/IsUakr.Mvc.csproj", "IsUakr.Mvc/"]
 	COPY ["IsUakr.DAL/IsUakr.DAL.csproj", "IsUakr.DAL/"]
 	COPY ["IsUakr.MessageBroker/IsUakr.MessageBroker.csproj", "IsUakr.MessageBroker/"]
@@ -14,15 +14,15 @@
 	COPY ["IsUakr.Parcer/IsUakr.Parcer.csproj", "IsUakr.Parcer/"]
 	RUN dotnet restore "IsUakr.Mvc/IsUakr.Mvc.csproj"
 	COPY . .
-	WORKDIR "/src/IsUakr.Mvc"
-	RUN dotnet build "IsUakr.Mvc.csproj" -c Release -o /app/build
+	WORKDIR "/src_web/IsUakr.Mvc"
+	RUN dotnet build "IsUakr.Mvc.csproj" -c Release -o /web/build
 	
 	FROM build AS publish
-	RUN dotnet publish "IsUakr.Mvc.csproj" -c Release -o /app/publish
+	RUN dotnet publish "IsUakr.Mvc.csproj" -c Release -o /web/publish
 	
 	FROM base AS final
-	WORKDIR /app
-	COPY --from=publish /app/publish .
+	WORKDIR /web
+	COPY --from=publish /web/publish .
 	ENTRYPOINT ["dotnet", "IsUakr.Mvc.dll"]
 
 
